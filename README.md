@@ -21,8 +21,7 @@ You can see how it works in [Heroku](https://weatherlocatiolforecast.herokuapp.c
 ## Tech
 
 Weather_api use data from [Open Weather Map](https://openweathermap.org/api)
-you need to register, get your own key and set it in src/config.js, and [ip-api]
-(https://ip-api.com/)
+you need to register, get your own key and set it in src/config.js, and [ip-api](https://ip-api.com/)
 
 ## License
 
