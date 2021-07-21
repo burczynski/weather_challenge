@@ -6,12 +6,14 @@ const { AppError }   = require('../../../utils/appError');
 const { Router }     = require('express');
 const router         = Router();
 let weather          = new Weather(weatherKey);
+let realIP           = require('../../../utils/ipHandler');
 
 // v1 routes
     router.get('/location', async (req, res, next) => {
         if (typeof req.socket.remoteAddress !== 'string') throw new AppError(`Ip adress must be string, ${typeof req} given`, 422);
-        try {            
-            let location = await Ip.getLocation(req.socket.remoteAddress);
+        try {
+            let ipAddr   = realIP(req);
+            let location = await Ip.getLocation(ipAddr);
             res.json(location);    
         } catch (error) {
             next(error);

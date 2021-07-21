@@ -3,6 +3,7 @@ const { currentWeatherApiUrl, fiveDaysForecastApiUrl } = require('../../config')
 const { AppError } = require('../../utils/appError');
 const { Ip }      = require('../ip/Ip');
 const { Request } = require('../request/Request');
+let realIP        = require('../../utils/ipHandler');
 
 /**
  * Create new Weather instance
@@ -21,13 +22,14 @@ class Weather {
      */
     async getWeatherData(req, forecastDays) {
         if (typeof req !== 'object' && typeof forecastDays !== 'number') throw new AppError(`Parameters must be object and number, ${typeof req} and ${typeof forecastDays} given`, 500);
-        let city, location, weatherData, data={};
+        let city, location, weatherData, ipAddr, data={};
         try {
             if (req.params.city) {
                 city = req.params.city;
             } else {
                 if(typeof req.socket.remoteAddress !== 'string' || req.socket.remoteAddress == '::ffff:127.0.0.1') throw new AppError (`Ip ${req.socket.remoteAddress} type ${typeof req.socket.remoteAddress} can't be request`, 200);
-                location = await Ip.getLocation(req.socket.remoteAddress);
+                ipAddr   =  realIP(req);
+                location = await Ip.getLocation(ipAddr);
                 city = location.city;
                 data.coord = location.coord; 
             }
